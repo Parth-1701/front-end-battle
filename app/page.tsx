@@ -3,8 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
-// --- FEATURE 2: BENTO TO ACCORDION ---
-// Hooked up to the SVGs you uploaded to the public folder
 const BENTO_FEATURES = [
   { id: 0, title: 'Neural Pipe Automation', desc: 'Real-time extraction maps optimized via standard infrastructure.', icon: '/cube-16-solid.svg' },
   { id: 1, title: 'Predictive Matrix Analytics', desc: 'Continuous stream scanning and operational trend charting.', icon: '/chart-pie.svg' },
@@ -86,7 +84,7 @@ function ResponsiveBentoAccordion() {
   );
 }
 
-// --- FEATURE 1: ISOLATED PRICING MATRIX ---
+
 const PRICING_MATRIX = {
   baseTiers: { starter: 29, pro: 79, enterprise: 199 },
   currencyMultipliers: { USD: { symbol: '$', rate: 1.0 }, EUR: { symbol: '€', rate: 0.92 }, INR: { symbol: '₹', rate: 83.5 } },
@@ -99,6 +97,9 @@ function IsolatedPricingSection() {
   const starterPriceRef = useRef<HTMLDivElement>(null);
   const proPriceRef = useRef<HTMLDivElement>(null);
   const enterprisePriceRef = useRef<HTMLDivElement>(null);
+  
+  const monthlyBtnRef = useRef<HTMLButtonElement>(null);
+  const annualBtnRef = useRef<HTMLButtonElement>(null);
 
   const calculateAndRenderPrices = () => {
     const currency = currentCurrency.current as keyof typeof PRICING_MATRIX.currencyMultipliers;
@@ -114,7 +115,25 @@ function IsolatedPricingSection() {
   useEffect(() => { calculateAndRenderPrices(); }, []);
 
   const handleCurrencyChange = (e: any) => { currentCurrency.current = e.target.value; calculateAndRenderPrices(); };
-  const handleBillingToggle = (type: string) => { currentBilling.current = type; calculateAndRenderPrices(); };
+  
+  const handleBillingToggle = (type: string) => { 
+    currentBilling.current = type; 
+    calculateAndRenderPrices(); 
+    
+        if (type === 'monthly') {
+        monthlyBtnRef.current?.classList.add('bg-[#0B252C]', 'text-[#FFC801]'); 
+        monthlyBtnRef.current?.classList.remove('bg-transparent', 'text-[#F1F6F4]');
+        
+        annualBtnRef.current?.classList.remove('bg-[#0B252C]', 'text-[#FFC801]');
+        annualBtnRef.current?.classList.add('bg-transparent', 'text-[#F1F6F4]');
+    } else {
+        annualBtnRef.current?.classList.add('bg-[#0B252C]', 'text-[#FFC801]'); 
+        annualBtnRef.current?.classList.remove('bg-transparent', 'text-[#F1F6F4]');
+        
+        monthlyBtnRef.current?.classList.remove('bg-[#0B252C]', 'text-[#FFC801]');
+        monthlyBtnRef.current?.classList.add('bg-transparent', 'text-[#F1F6F4]');
+    }
+  };
 
   return (
     <section className="w-full py-24 px-6 bg-[#172B36] border-t border-[#D9E8E2]/10 relative" id="pricing">
@@ -122,9 +141,19 @@ function IsolatedPricingSection() {
         <span className="text-[#FFC801] font-mono text-sm tracking-widest uppercase mb-4 block">// Performance Tiers</span>
         <h2 className="text-4xl font-sans font-medium mb-12 text-[#F1F6F4]">Scale with precision</h2>
         
-        <div className="flex flex-wrap justify-center gap-2 mb-16 p-1 border border-[#D9E8E2]/20 rounded-lg bg-[#172B36]/50 backdrop-blur-sm">
-          <button onClick={() => handleBillingToggle('monthly')} className="px-6 py-2.5 rounded hover:bg-[#114C5A] text-[#F1F6F4] font-sans text-sm font-medium transition-colors duration-200">Monthly</button>
-          <button onClick={() => handleBillingToggle('annual')} className="px-6 py-2.5 rounded bg-[#114C5A] text-[#F1F6F4] font-sans text-sm font-medium transition-colors duration-200 flex items-center gap-2">
+        <div className="flex flex-wrap justify-center gap-2 mb-16 p-1 border border-[#D9E8E2]/20 rounded-lg bg-[#114C5A]/30 backdrop-blur-sm">
+          <button 
+            ref={monthlyBtnRef}
+            onClick={() => handleBillingToggle('monthly')} 
+            className="px-6 py-2.5 rounded bg-[#0B252C] text-[#FFC801] font-sans text-sm font-medium transition-colors duration-200"
+          >
+            Monthly
+          </button>
+          <button 
+            ref={annualBtnRef}
+            onClick={() => handleBillingToggle('annual')} 
+            className="px-6 py-2.5 rounded bg-transparent text-[#F1F6F4] hover:bg-[#0B252C]/50 font-sans text-sm font-medium transition-colors duration-200 flex items-center gap-2"
+          >
             Annual <span className="bg-[#FF9932] text-[#172B36] text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Save 20%</span>
           </button>
           <div className="w-[1px] h-6 bg-[#D9E8E2]/20 mx-2 self-center hidden sm:block"></div>
@@ -140,7 +169,10 @@ function IsolatedPricingSection() {
             const refMap: any = { Starter: starterPriceRef, Pro: proPriceRef, Enterprise: enterprisePriceRef };
             const isHighlight = tier === 'Pro';
             return (
-              <div key={tier} className={`p-8 rounded-xl border flex flex-col justify-between relative overflow-hidden transition-transform duration-300 hover:-translate-y-1 ${isHighlight ? 'bg-[#114C5A]/30 border-[#FF9932]/50 shadow-[0_0_40px_rgba(255,153,50,0.1)]' : 'bg-transparent border-[#D9E8E2]/10'}`}>
+              <div 
+                key={tier} 
+                className={`p-8 rounded-xl border flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(255,200,1,0.12)] hover:border-[#FFC801]/60 ${isHighlight ? 'bg-[#114C5A]/30 border-[#FF9932]/50' : 'bg-transparent border-[#D9E8E2]/10'}`}
+              >
                 {isHighlight && <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FFC801] to-[#FF9932]"></div>}
                 <div>
                   <h3 className={`text-xl font-sans font-medium mb-2 ${isHighlight ? 'text-[#FFC801]' : 'text-[#F1F6F4]'}`}>{tier}</h3>
@@ -152,7 +184,7 @@ function IsolatedPricingSection() {
                     {i === 0 ? 'Essential tools for rapid deployment.' : i === 1 ? 'Advanced telemetry and unlimited nodes.' : 'Custom architecture for high-volume pipelines.'}
                   </p>
                 </div>
-                <button className={`w-full py-4 text-sm font-medium rounded-lg transition-colors duration-200 font-sans ${isHighlight ? 'bg-[#FF9932] text-[#172B36] hover:bg-[#FFC801]' : 'bg-[#114C5A] text-[#F1F6F4] hover:bg-[#114C5A]/80'}`}>
+                <button className={`w-full py-4 text-sm font-medium rounded-lg transition-colors duration-200 font-sans ${isHighlight ? 'bg-[#FF9932] text-[#172B36] hover:bg-[#FFC801]' : 'bg-[#114C5A] text-[#F1F6F4] hover:bg-[#114C5A]/80 hover:text-[#FFC801]'}`}>
                   Deploy Node
                 </button>
               </div>
@@ -163,13 +195,11 @@ function IsolatedPricingSection() {
     </section>
   );
 }
-
-// --- MAIN PAGE ASSEMBLY ---
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center bg-[#172B36] text-[#F1F6F4] selection:bg-[#FF9932] selection:text-[#172B36]">
       
-      {/* Navigation matching the sleek demo vibe */}
+      {}
       <nav className="w-full flex justify-between items-center px-8 py-6 max-w-7xl mx-auto border-b border-[#D9E8E2]/5">
         <div className="flex items-center gap-2">
           <img src="/link-solid.svg" className="w-5 h-5 filter invert" alt="logo"/>
@@ -184,7 +214,7 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* Hero Section */}
+      {}
       <section className="w-full max-w-6xl flex flex-col md:flex-row items-center justify-between pt-24 pb-32 px-6 relative">
         <div className="w-full md:w-3/5 relative z-10 flex flex-col items-start text-left">
           <h1 className="text-5xl md:text-[80px] font-sans font-medium leading-[1.05] tracking-tight mb-8">
@@ -206,7 +236,7 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Abstract structural visual for the right side of the hero */}
+        {}
         <div className="w-full md:w-2/5 mt-16 md:mt-0 relative hidden md:flex justify-end">
           <div className="w-[400px] h-[400px] border border-[#D9E8E2]/10 rounded-full relative animate-[spin_60s_linear_infinite]">
             <div className="absolute top-0 left-1/2 w-4 h-4 bg-[#FF9932] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_20px_rgba(255,153,50,0.8)]"></div>
