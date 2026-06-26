@@ -1,8 +1,8 @@
 'use client'; 
 
 import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
 
+// --- FEATURE 2: BENTO TO ACCORDION ---
 const BENTO_FEATURES = [
   { id: 0, title: 'Neural Pipe Automation', desc: 'Real-time extraction maps optimized via standard infrastructure.', icon: '/cube-16-solid.svg' },
   { id: 1, title: 'Predictive Matrix Analytics', desc: 'Continuous stream scanning and operational trend charting.', icon: '/chart-pie.svg' },
@@ -84,7 +84,7 @@ function ResponsiveBentoAccordion() {
   );
 }
 
-
+// --- FEATURE 1: ISOLATED PRICING MATRIX ---
 const PRICING_MATRIX = {
   baseTiers: { starter: 29, pro: 79, enterprise: 199 },
   currencyMultipliers: { USD: { symbol: '$', rate: 1.0 }, EUR: { symbol: '€', rate: 0.92 }, INR: { symbol: '₹', rate: 83.5 } },
@@ -120,7 +120,7 @@ function IsolatedPricingSection() {
     currentBilling.current = type; 
     calculateAndRenderPrices(); 
     
-        if (type === 'monthly') {
+    if (type === 'monthly') {
         monthlyBtnRef.current?.classList.add('bg-[#0B252C]', 'text-[#FFC801]'); 
         monthlyBtnRef.current?.classList.remove('bg-transparent', 'text-[#F1F6F4]');
         
@@ -195,11 +195,13 @@ function IsolatedPricingSection() {
     </section>
   );
 }
+
+// --- MAIN PAGE ASSEMBLY ---
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center bg-[#172B36] text-[#F1F6F4] selection:bg-[#FF9932] selection:text-[#172B36]">
+    <main id="top" className="flex min-h-screen flex-col items-center bg-[#172B36] text-[#F1F6F4] selection:bg-[#FF9932] selection:text-[#172B36]">
       
-      {}
+      {/* Navigation */}
       <nav className="w-full flex justify-between items-center px-8 py-6 max-w-7xl mx-auto border-b border-[#D9E8E2]/5">
         <div className="flex items-center gap-2">
           <img src="/link-solid.svg" className="w-5 h-5 filter invert" alt="logo"/>
@@ -214,7 +216,7 @@ export default function Home() {
         </button>
       </nav>
 
-      {}
+      {/* Hero Section */}
       <section className="w-full max-w-6xl flex flex-col md:flex-row items-center justify-between pt-24 pb-32 px-6 relative">
         <div className="w-full md:w-3/5 relative z-10 flex flex-col items-start text-left">
           <h1 className="text-5xl md:text-[80px] font-sans font-medium leading-[1.05] tracking-tight mb-8">
@@ -225,18 +227,18 @@ export default function Home() {
             Deploy custom enterprise agents and automate complex workflows. Scale your intelligence with Armory today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <button className="px-8 py-4 bg-[#F1F6F4] text-[#172B36] font-medium font-sans rounded hover:bg-[#FFC801] transition-colors duration-200 flex items-center justify-center gap-3">
+            <a href="#pricing" className="px-8 py-4 bg-[#F1F6F4] text-[#172B36] font-medium font-sans rounded hover:bg-[#FFC801] transition-colors duration-200 flex items-center justify-center gap-3">
               Build A Workflow
               <img src="/chevron-right.svg" className="w-4 h-4 opacity-70" alt="arrow"/>
-            </button>
-            <button className="px-8 py-4 bg-transparent border border-[#D9E8E2]/20 text-[#F1F6F4] font-medium font-sans rounded hover:bg-[#114C5A]/30 transition-colors duration-200 flex items-center justify-center gap-3">
+            </a>
+            <a href="#features" className="px-8 py-4 bg-transparent border border-[#D9E8E2]/20 text-[#F1F6F4] font-medium font-sans rounded hover:bg-[#114C5A]/30 transition-colors duration-200 flex items-center justify-center gap-3">
               <img src="/search.svg" className="w-4 h-4 filter invert opacity-70" alt="search"/>
               Read the Docs
-            </button>
+            </a>
           </div>
         </div>
         
-        {}
+        {/* Abstract structural visual */}
         <div className="w-full md:w-2/5 mt-16 md:mt-0 relative hidden md:flex justify-end">
           <div className="w-[400px] h-[400px] border border-[#D9E8E2]/10 rounded-full relative animate-[spin_60s_linear_infinite]">
             <div className="absolute top-0 left-1/2 w-4 h-4 bg-[#FF9932] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_20px_rgba(255,153,50,0.8)]"></div>
@@ -253,6 +255,22 @@ export default function Home() {
       <ResponsiveBentoAccordion />
       <IsolatedPricingSection />
       
+      {/* Premium Dark Footer */}
+      <footer className="w-full border-t border-[#D9E8E2]/5 py-12 px-6 mt-8 bg-[#172B36]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity">
+            <img src="/link-solid.svg" className="w-5 h-5 filter invert" alt="logo"/>
+            <span className="font-mono font-bold tracking-tighter text-sm">ARMORY<span className="text-[#FF9932]">.AI</span></span>
+          </div>
+          <div className="flex flex-wrap justify-center gap-8 font-mono text-xs text-[#D9E8E2]/50">
+            <a href="#top" className="hover:text-[#FFC801] transition-colors">Legal</a>
+            <a href="#top" className="hover:text-[#FFC801] transition-colors">Terms of Service</a>
+            <a href="#top" className="hover:text-[#FFC801] transition-colors">Privacy Policy</a>
+            <a href="#top" className="hover:text-[#FFC801] transition-colors">Contact</a>
+          </div>
+        </div>
+      </footer>
+
     </main>
   );
-}
+            }
