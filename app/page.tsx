@@ -82,12 +82,14 @@ const PRICING_MATRIX = {
 function IsolatedPricingSection() {
   const currentCurrency = useRef('USD');
   const currentBilling = useRef('monthly'); 
-  const starterPriceRef = useRef(null);
-  const proPriceRef = useRef(null);
-  const enterprisePriceRef = useRef(null);
+  // Added basic DOM element types to satisfy TS
+  const starterPriceRef = useRef<HTMLDivElement>(null);
+  const proPriceRef = useRef<HTMLDivElement>(null);
+  const enterprisePriceRef = useRef<HTMLDivElement>(null);
 
   const calculateAndRenderPrices = () => {
-    const currency = currentCurrency.current;
+    // The Fix: Asserts the string as a valid key of our matrix
+    const currency = currentCurrency.current as keyof typeof PRICING_MATRIX.currencyMultipliers;
     const billing = currentBilling.current;
     const config = PRICING_MATRIX.currencyMultipliers[currency];
     const billingMultiplier = billing === 'annual' ? PRICING_MATRIX.discount.annualMultiplier : 1.0;
@@ -99,8 +101,9 @@ function IsolatedPricingSection() {
 
   useEffect(() => { calculateAndRenderPrices(); }, []);
 
-  const handleCurrencyChange = (e) => { currentCurrency.current = e.target.value; calculateAndRenderPrices(); };
-  const handleBillingToggle = (type) => { currentBilling.current = type; calculateAndRenderPrices(); };
+  // Added 'any' bypasses here so TS doesn't block your event handlers
+  const handleCurrencyChange = (e: any) => { currentCurrency.current = e.target.value; calculateAndRenderPrices(); };
+  const handleBillingToggle = (type: string) => { currentBilling.current = type; calculateAndRenderPrices(); };
 
   return (
     <section className="w-full py-20 px-6 bg-[#172B36]" id="pricing">
@@ -120,7 +123,7 @@ function IsolatedPricingSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
           {['Starter', 'Pro', 'Enterprise'].map((tier) => {
-            const refMap = { Starter: starterPriceRef, Pro: proPriceRef, Enterprise: enterprisePriceRef };
+            const refMap: any = { Starter: starterPriceRef, Pro: proPriceRef, Enterprise: enterprisePriceRef };
             return (
               <div key={tier} className="bg-[#114C5A]/40 border border-[#D9E8E2]/10 p-8 rounded-xl flex flex-col justify-between">
                 <div>
